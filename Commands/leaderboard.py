@@ -31,7 +31,7 @@ class Leaderboard(commands.Cog):
         if not top_players:
             msg_content += "\n*Hiện tại chưa có ai ghép thành công Hộp Bánh nào cả. Hãy là người đầu tiên!*\n"
         else:
-            medal_emojis = {1: "<a:medal1:1523749987433975899>", 2: "<a:medal2:1523749990126714891>", 3: "<a:medal3:1523749992819456000>"}
+            medal_emojis = {1: "<a:medal1:1523749987433975899>", 2: "<a:medal2:1523749990126714891>", 3: "<a:medal3:1523749988700655657>"}
 
             for index, (user_id, count) in enumerate(top_players, start=1):
                 emoji = medal_emojis.get(index, f"`#{index}` ")
