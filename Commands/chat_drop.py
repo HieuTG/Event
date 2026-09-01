@@ -15,7 +15,7 @@ class ChatDrop(commands.Cog):
     def __init__(self, bot):
         self.bot = bot
         self.cooldowns = {} 
-        self.COOLDOWN_TIME = 120 # 2 phút Cooldown (120 giây)
+        self.COOLDOWN_TIME = 60 # 1 phút Cooldown (60 giây)
 
     @commands.Cog.listener()
     async def on_message(self, message):
