@@ -25,7 +25,7 @@ class Leaderboard(commands.Cog):
         msg_content = (
             "# <:cupsk:1543848383456739391> **BẢNG XẾP HẠNG** <:cupsk:1543848383456739391>\n"
             "Dưới đây là danh sách Top 10 người có số lượng **Hộp Bánh Trung Thu** đã ghép nhiều nhất Server!\n"
-            "<a:line:1448295108515467306><a:line:1448295108515467306><a:line:1448295108515467306><a:line:1448295108515467306><a:line:1448295108515467306><a:line:1448295108515467306><a:line:1448295108515467306><a:line:1448295108515467306><a:line:1448295108515467306>\n"
+            "<a:line:1544173448786616371><a:line:1544173448786616371><a:line:1544173448786616371><a:line:1544173448786616371><a:line:1544173448786616371><a:line:1544173448786616371><a:line:1544173448786616371><a:line:1544173448786616371><a:line:1544173448786616371>\n"
         )
 
         if not top_players:
@@ -49,7 +49,7 @@ class Leaderboard(commands.Cog):
                 else:
                     msg_content += f"{emoji} {user_name} — `{count} Hộp`\n"
 
-        msg_content += "<a:line:1448295108515467306><a:line:1448295108515467306><a:line:1448295108515467306><a:line:1448295108515467306><a:line:1448295108515467306><a:line:1448295108515467306><a:line:1448295108515467306><a:line:1448295108515467306><a:line:1448295108515467306>\n"
+        msg_content += "<a:line:1544173448786616371><a:line:1544173448786616371><a:line:1544173448786616371><a:line:1544173448786616371><a:line:1544173448786616371><a:line:1544173448786616371><a:line:1544173448786616371><a:line:1544173448786616371><a:line:1544173448786616371>\n"
         
         # Thêm thời gian cập nhật ở cuối tin nhắn (thay thế cho footer cũ)
         current_time = datetime.now().strftime("%d/%m/%Y %H:%M:%S")
