@@ -150,8 +150,8 @@ class BoxSpawnCog(commands.Cog):
     # =========================================================================
     async def start_cake_rain(self):
         self.is_event_active = True
-        self.time_since_last_spawn = 9999 # Ép thả bánh NGAY LẬP TỨC 
-        
+        self.time_since_last_spawn = 9999 # Ép thả bánh NGAY LẬP TỨC
+
         channel_id = database.get_setting("event_channel_id")
         role_id = database.get_setting("event_role_id")
 
@@ -170,8 +170,13 @@ class BoxSpawnCog(commands.Cog):
                     msg = await channel.send(content=f"<a:exc:1523747494805110814> Thông báo sự kiện: {mention_text}", embed=embed)
                     self.event_message_id = msg.id
                     self.event_channel_id = channel.id
-                except Exception:
-                    pass
+                    print(f"✅ [MƯA BÁNH] Đã gửi thông báo event tới kênh {channel.name} (ID: {channel.id})")
+                except Exception as e:
+                    print(f"❌ [MƯA BÁNH] Lỗi khi gửi thông báo: {e}")
+            else:
+                print(f"❌ [MƯA BÁNH] Không tìm thấy kênh với ID: {channel_id}")
+        else:
+            print(f"⚠️ [MƯA BÁNH] Chưa set kênh thông báo event! Dùng: emuabanh setchannel #kênh")
 
     async def stop_cake_rain(self):
         self.is_event_active = False

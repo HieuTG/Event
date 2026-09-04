@@ -26,37 +26,75 @@ class Cook(commands.Cog):
 
     @commands.command(name="menu", aliases=["lobanh", "congthuc"])
     async def cook_menu(self, ctx):
-        """Bảng công thức đúc bánh từ mảnh vỡ nấu cổ truyền"""
+        """Bảng công thức đúc bánh từ mảnh vỡ và đập bánh thành mảnh vỡ"""
         embed = discord.Embed(
-            title="📜 LÒ ĐÚC BÁNH CỔ TRUYỀN - CÔNG THỨC 📜",
+            title="📜 XƯỞNG CHẾ TÁC BÁNH TRUNG THU 📜",
             description=(
-                "Nơi tái chế những <:manhvo:1523760564663222382> `Mảnh Bánh Vỡ` nhặt được khi trò chuyện "
-                "thành những chiếc bánh nguyên vẹn hoàn chỉnh!\n"
+                "Nơi bạn có thể **đúc bánh** từ <:manhvo:1523760564663222382> `Mảnh Vỡ` hoặc **đập bánh** thừa để lấy mảnh vỡ!\n"
                 "⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯"
             ),
             color=discord.Color.dark_gold()
         )
-        
+
+        # PHẦN 1: ĐÚC BÁNH TỪ MẢNH VỠ
+        embed.add_field(
+            name="<a:smoker30:1523838199385030827> __LÒ ĐÚC BÁNH__ (Mảnh Vỡ → Bánh)",
+            value="Tái chế <:manhvo:1523760564663222382> `Mảnh Vỡ` thành bánh nguyên vẹn!",
+            inline=False
+        )
+
         embed.add_field(
             name="<:demir87:1523749993784283326> Vị Phổ Thông (Chi phí: 5 <:manhvo:1523760564663222382>)",
             value="<:dx_icon:1523756971738529802> `dx` (Đậu Xanh) | <:tc_icon:1523756962930757712> `tc` (Thập Cẩm) | <:md_icon:1523756996858351756> `md` (Mè Đen)",
             inline=False
         )
-        
+
         embed.add_field(
             name="<:Minecraft_Gold_Ingot:1523749992437645522> Vị Thượng Hạng (Chi phí: 10 <:manhvo:1523760564663222382>)",
             value="<:km_icon:1523756985047060734> `km` (Khoai Môn) | <:hs_icon:1523756991879839994> `hs` (Hạt Sen)",
             inline=False
         )
-        
+
         embed.add_field(
             name="<:Minecraft_diamond:1523749991212908544> Vị Hoàng Gia (Chi phí: 20 <:manhvo:1523760564663222382>)",
             value="<:tm_icon:1523756978663325706> `tm` (Trứng Muối)",
             inline=False
         )
-        
+
+        # Ngăn cách
+        embed.add_field(
+            name="​",
+            value="⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯",
+            inline=False
+        )
+
+        # PHẦN 2: ĐẬP BÁNH THÀNH MẢNH VỠ
+        embed.add_field(
+            name="<a:Hammer:1270399066535645195> __LÒ ĐẬP BÁNH__ (Bánh → Mảnh Vỡ)",
+            value="Đập bánh thừa để chuyển đổi thành <:manhvo:1523760564663222382> `Mảnh Vỡ`!",
+            inline=False
+        )
+
+        embed.add_field(
+            name="<:demir87:1523749993784283326> Vị Phổ Thông (Tỉ lệ: 2 bánh → 1 <:manhvo:1523760564663222382>)",
+            value="<:dx_icon:1523756971738529802> `dx` (Đậu Xanh) | <:tc_icon:1523756962930757712> `tc` (Thập Cẩm) | <:md_icon:1523756996858351756> `md` (Mè Đen)",
+            inline=False
+        )
+
+        embed.add_field(
+            name="<:Minecraft_Gold_Ingot:1523749992437645522> Vị Thượng Hạng (Tỉ lệ: 1 bánh → 1 <:manhvo:1523760564663222382>)",
+            value="<:km_icon:1523756985047060734> `km` (Khoai Môn) | <:hs_icon:1523756991879839994> `hs` (Hạt Sen)",
+            inline=False
+        )
+
+        embed.add_field(
+            name="<:Minecraft_diamond:1523749991212908544> Vị Hoàng Gia (Tỉ lệ: 1 bánh → 5 <:manhvo:1523760564663222382>)",
+            value="<:tm_icon:1523756978663325706> `tm` (Trứng Muối)",
+            inline=False
+        )
+
         embed.set_footer(
-            text="Cú pháp đúc bánh: !nau <mã_vị_bánh> (Ví dụ: !nau tm)",
+            text="Cú pháp: enau <mã> [số] | edap <mã> [số] • Ví dụ: enau tm | edap dx 4",
             icon_url=ctx.author.display_avatar.url
         )
         await ctx.send(embed=embed)
