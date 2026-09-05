@@ -73,13 +73,13 @@ class HelpDropdown(discord.ui.Select):
             embed.description = (
                 "> *Hãy tích cực trò chuyện lành mạnh cùng mọi người để có cơ hội nhặt nguyên liệu quý giá!*\n\n"
                 "<a:brown_star:1523753543897710773> **Cơ chế nhặt quà:**\n"
-                "• Khi bạn nhắn tin trên các kênh chat sự kiện, bạn có **5% cơ hội** nhận được quà ngẫu nhiên.\n"
-                "• Hệ thống áp dụng thời gian hồi (**Cooldown**) là **2 phút** giữa mỗi lần nhặt bánh.\n\n"
+                "• Khi bạn nhắn tin trên các kênh chat sự kiện, bạn có **10% cơ hội** nhận được quà ngẫu nhiên.\n"
+                "• Hệ thống áp dụng thời gian hồi (**Cooldown**) là **1 phút** giữa mỗi lần nhặt bánh.\n\n"
                 "<a:exc:1523747494805110814> **Tỷ lệ độ hiếm vật phẩm:**\n"
-                "• <:manhvo:1523760564663222382> **Mảnh Bánh Vỡ:** `28%` *(Xui xẻo làm rơi, tích mảnh để nấu lại)*\n"
-                "• <:dx_icon:1523756971738529802> **Đậu Xanh / <:tc_icon:1523756962930757712> Thập Cẩm / <:md_icon:1523756996858351756> Mè Đen:** `20%` mỗi loại (Phổ thông)\n"
-                "• <:km_icon:1523756985047060734> **Khoai Môn / <:hs_icon:1523756991879839994> Hạt Sen:** `5%` mỗi loại (Thượng hạng)\n"
-                "• <:tm_icon:1523756978663325706> **Trứng Muối:** `2%` (Siêu cấp quý hiếm!)\n"
+                "• <:manhvo:1523760564663222382> **Mảnh Bánh Vỡ:** `27%` *(Xui xẻo làm rơi, tích mảnh để nấu lại)*\n"
+                "• <:dx_icon:1523756971738529802> **Đậu Xanh / <:tc_icon:1523756962930757712> Thập Cẩm / <:md_icon:1523756996858351756> Mè Đen:** `18%` mỗi loại (Phổ thông)\n"
+                "• <:km_icon:1523756985047060734> **Khoai Môn / <:hs_icon:1523756991879839994> Hạt Sen:** `7%` mỗi loại (Thượng hạng)\n"
+                "• <:tm_icon:1523756978663325706> **Trứng Muối:** `5%` (Siêu cấp quý hiếm!)\n"
                 "⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯"
             )
 

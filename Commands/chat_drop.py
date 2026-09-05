@@ -40,12 +40,12 @@ class ChatDrop(commands.Cog):
             if time_passed < self.COOLDOWN_TIME:
                 return 
 
-        if random.random() > 0.05: 
+        if random.random() > 0.1:  # 10% cơ hội rớt bánh
             return 
 
         rand_item = random.choices(
             population=["dau_xanh", "thap_cam", "me_den", "khoai_mon", "hat_sen", "trung_muoi", "manh_vo"],
-            weights=[20, 20, 20, 5, 5, 2, 28],
+            weights=[18, 18, 18, 7, 7, 5, 27],
             k=1
         )[0]
 
