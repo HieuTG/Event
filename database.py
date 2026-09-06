@@ -281,14 +281,13 @@ def get_total_crafted_boxes(user_id: str) -> int:
     """
     conn = sqlite3.connect(DB_NAME)
     cursor = conn.cursor()
-    
-    # Giả sử bạn lưu tổng số hộp đã ghép ở bảng 'inventory' (cột hop_banh hoặc cột thống kê riêng).
-    # Hãy điều chỉnh tên bảng/cột cho khớp với Database thực tế của bạn:
-    cursor.execute("SELECT hop_banh FROM inventory WHERE user_id = ?", (user_id,))
+
+    # Lấy từ cột total_crafted - tổng số hộp đã ghép tích lũy (không bị ảnh hưởng bởi admin trừ hộp)
+    cursor.execute("SELECT total_crafted FROM inventory WHERE user_id = ?", (user_id,))
     row = cursor.fetchone()
-    
+
     conn.close()
-    
+
     # Nếu tìm thấy dữ liệu thì trả về con số, nếu chưa có thì trả về 0
     return row[0] if row else 0
 
