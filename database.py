@@ -7,7 +7,7 @@ def init_db():
     conn = sqlite3.connect(DB_NAME)
     cursor = conn.cursor()
     
-    # Bảng lưu trữ túi đồ của user (Đã thêm cột manh_vo)
+    # Bảng lưu trữ túi đồ của user (Đã thêm cột manh_vo và total_crafted)
     cursor.execute("""
         CREATE TABLE IF NOT EXISTS inventory (
             user_id TEXT PRIMARY KEY,
@@ -18,7 +18,8 @@ def init_db():
             khoai_mon INTEGER DEFAULT 0,
             trung_muoi INTEGER DEFAULT 0,
             hop_banh INTEGER DEFAULT 0,
-            manh_vo INTEGER DEFAULT 0
+            manh_vo INTEGER DEFAULT 0,
+            total_crafted INTEGER DEFAULT 0
         )
     """)
 
@@ -96,19 +97,20 @@ def craft_mooncakes(user_id: str) -> bool:
     """Ghép bộ 6 nguyên liệu thành 1 Hộp Bánh."""
     conn = sqlite3.connect(DB_NAME)
     cursor = conn.cursor()
-    
+
     cursor.execute("SELECT dau_xanh, thap_cam, me_den, hat_sen, khoai_mon, trung_muoi FROM inventory WHERE user_id = ?", (user_id,))
     row = cursor.fetchone()
-    
+
     if row is None or any(count < 1 for count in row):
         conn.close()
         return False
-        
+
     cursor.execute("""
-        UPDATE inventory 
+        UPDATE inventory
         SET dau_xanh = dau_xanh - 1, thap_cam = thap_cam - 1, me_den = me_den - 1,
             hat_sen = hat_sen - 1, khoai_mon = khoai_mon - 1, trung_muoi = trung_muoi - 1,
-            hop_banh = hop_banh + 1
+            hop_banh = hop_banh + 1,
+            total_crafted = total_crafted + 1
         WHERE user_id = ?
     """, (user_id,))
     conn.commit()
@@ -228,51 +230,45 @@ def execute_flexible_trade(user_a_id: str, item_a: str, amount_a: int, user_b_id
 
 def get_top_bakers(limit: int = 10) -> list:
     """
-    Lấy danh sách top những người ghép được nhiều hộp bánh nhất.
-    Lưu ý: Bạn hãy thay đổi tên bảng hoặc tên cột bên dưới cho đúng với cấu hình 
-    bảng lưu trữ số hộp bánh đã ghép (inventory / users) trong DB của bạn.
-    Ví dụ ở đây giả định bảng 'inventory' có cột 'user_id', 'hop_banh' (hoặc tương tự).
+    Lấy danh sách top những người ghép được nhiều hộp bánh nhất (dựa trên tổng số đã ghép).
     """
     conn = sqlite3.connect(DB_NAME)
     cursor = conn.cursor()
-    
-    # Giả sử bạn lưu số hộp bánh ghép được trong bảng dữ liệu người dùng/kho đồ.
-    # Thay đổi câu lệnh SQL này cho khớp với cấu trúc Database hiện tại của bạn:
+
     cursor.execute("""
-        SELECT user_id, hop_banh 
-        FROM inventory 
-        WHERE hop_banh > 0 
-        ORDER BY hop_banh DESC 
+        SELECT user_id, total_crafted
+        FROM inventory
+        WHERE total_crafted > 0
+        ORDER BY total_crafted DESC
         LIMIT ?
     """, (limit,))
-    
+
     rows = cursor.fetchall()
     conn.close()
     return rows # Trả về danh sách [(user_id, so_luong), ...]
 
 def get_user_rank_and_count(user_id: str):
     """
-    Tìm thứ hạng và số lượng hộp bánh hiện có của một người chơi.
-    Trả về: (rank, count) - Ví dụ: (15, 3) nghĩa là hạng 15 với 3 hộp bánh.
+    Tìm thứ hạng và tổng số hộp bánh đã ghép của một người chơi.
+    Trả về: (rank, count) - Ví dụ: (15, 3) nghĩa là hạng 15 với 3 hộp bánh đã ghép.
     """
     conn = sqlite3.connect(DB_NAME)
     cursor = conn.cursor()
-    
-    # 1. Lấy số lượng hộp bánh của người chơi
-    # (Hãy nhớ sửa tên bảng 'inventory' và tên cột 'hop_banh' cho khớp với DB của bạn)
-    cursor.execute("SELECT hop_banh FROM inventory WHERE user_id = ?", (user_id,))
+
+    # 1. Lấy tổng số hộp bánh đã ghép của người chơi
+    cursor.execute("SELECT total_crafted FROM inventory WHERE user_id = ?", (user_id,))
     row = cursor.fetchone()
-    
+
     if not row or row[0] <= 0:
         conn.close()
-        return None, 0 # Chưa có hộp bánh nào
-        
+        return None, 0 # Chưa ghép hộp bánh nào
+
     user_count = row[0]
-    
-    # 2. Đếm xem có bao nhiêu người có số hộp bánh NHIỀU HƠN người này -> Cộng 1 ra thứ hạng
-    cursor.execute("SELECT COUNT(*) FROM inventory WHERE hop_banh > ?", (user_count,))
+
+    # 2. Đếm xem có bao nhiêu người có số hộp bánh đã ghép NHIỀU HƠN người này -> Cộng 1 ra thứ hạng
+    cursor.execute("SELECT COUNT(*) FROM inventory WHERE total_crafted > ?", (user_count,))
     rank = cursor.fetchone()[0] + 1
-    
+
     conn.close()
     return rank, user_count
 
