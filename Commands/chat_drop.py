@@ -45,7 +45,7 @@ class ChatDrop(commands.Cog):
 
         rand_item = random.choices(
             population=["dau_xanh", "thap_cam", "me_den", "khoai_mon", "hat_sen", "trung_muoi", "manh_vo"],
-            weights=[18, 18, 18, 7, 7, 5, 27],
+            weights=[20, 20, 20, 5, 5, 3, 27],
             k=1
         )[0]
 

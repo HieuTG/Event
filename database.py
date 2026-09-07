@@ -174,7 +174,7 @@ def cook_cake_db(user_id: str, target_item: str, cost: int) -> bool:
     return True
 
 def check_trade_limit(user_id: str) -> bool:
-    """Kiểm tra xem người dùng đã dùng hết 2 lượt tạo lệnh trade trong ngày chưa."""
+    """Kiểm tra xem người dùng đã dùng hết 3 lượt tạo lệnh trade trong ngày chưa."""
     import datetime
     today = datetime.date.today().isoformat() # Lấy ngày định dạng YYYY-MM-DD
     conn = sqlite3.connect(DB_NAME)
@@ -182,8 +182,8 @@ def check_trade_limit(user_id: str) -> bool:
     cursor.execute("SELECT count FROM trade_limits WHERE user_id = ? AND trade_date = ?", (user_id, today))
     row = cursor.fetchone()
     conn.close()
-    if row and row[0] >= 2:
-        return False # Đã chạm giới hạn 2 lần/ngày
+    if row and row[0] >= 3:
+        return False # Đã chạm giới hạn 3 lần/ngày
     return True
 
 def increment_trade_limit(user_id: str):
@@ -205,25 +205,37 @@ def execute_flexible_trade(user_a_id: str, item_a: str, amount_a: int, user_b_id
     """Thực hiện giao dịch với số lượng chênh lệch tùy ý giữa bên A và bên B."""
     conn = sqlite3.connect(DB_NAME)
     cursor = conn.cursor()
-    
+
     # Kiểm tra túi đồ người đề xuất (Bên A)
     cursor.execute(f"SELECT {item_a} FROM inventory WHERE user_id = ?", (user_a_id,))
     row_a = cursor.fetchone()
     if row_a is None or row_a[0] < amount_a:
         conn.close()
         return False
-        
+
     # Kiểm tra túi đồ đối phương (Bên B)
     cursor.execute(f"SELECT {item_b} FROM inventory WHERE user_id = ?", (user_b_id,))
     row_b = cursor.fetchone()
     if row_b is None or row_b[0] < amount_b:
         conn.close()
         return False
-        
+
     # Khấu trừ số lượng tương ứng và chuyển giao tài sản chéo công bằng
-    cursor.execute(f"UPDATE inventory SET {item_a} = {item_a} - ?, {item_b} = {item_b} + ? WHERE user_id = ?", (amount_a, amount_b, user_a_id))
-    cursor.execute(f"UPDATE inventory SET {item_b} = {item_b} - ?, {item_a} = {item_a} + ? WHERE user_id = ?", (amount_b, amount_a, user_b_id))
-    
+    # Nếu cùng loại vật phẩm, cần tính net change để tránh ghi đè
+    if item_a == item_b:
+        # Trường hợp đặc biệt: cùng trao đổi 1 loại vật phẩm với số lượng khác nhau
+        # User A: trừ amount_a, cộng amount_b => net = amount_b - amount_a
+        net_change_a = amount_b - amount_a
+        cursor.execute(f"UPDATE inventory SET {item_a} = {item_a} + ? WHERE user_id = ?", (net_change_a, user_a_id))
+
+        # User B: trừ amount_b, cộng amount_a => net = amount_a - amount_b
+        net_change_b = amount_a - amount_b
+        cursor.execute(f"UPDATE inventory SET {item_b} = {item_b} + ? WHERE user_id = ?", (net_change_b, user_b_id))
+    else:
+        # Trường hợp bình thường: 2 loại vật phẩm khác nhau
+        cursor.execute(f"UPDATE inventory SET {item_a} = {item_a} - ?, {item_b} = {item_b} + ? WHERE user_id = ?", (amount_a, amount_b, user_a_id))
+        cursor.execute(f"UPDATE inventory SET {item_b} = {item_b} - ?, {item_a} = {item_a} + ? WHERE user_id = ?", (amount_b, amount_a, user_b_id))
+
     conn.commit()
     conn.close()
     return True

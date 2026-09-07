@@ -259,9 +259,9 @@ class TradeCommand(commands.Cog):
             await ctx.send("❌ Bạn không thể giao dịch với các thực thể AI/Bot hệ thống!")
             return
 
-        # KIỂM TRA GIỚI HẠN: Chỉ được dùng tối đa 2 lệnh trade trong 1 ngày
+        # KIỂM TRA GIỚI HẠN: Chỉ được dùng tối đa 3 lệnh trade trong 1 ngày
         if not database.check_trade_limit(str(ctx.author.id)):
-            await ctx.send(f"❌ {ctx.author.mention}, bạn đã dùng hết giới hạn **2 lệnh trade** của hôm nay rồi! Hãy quay lại vào ngày mai nhé.")
+            await ctx.send(f"❌ {ctx.author.mention}, bạn đã dùng hết giới hạn **3 lệnh trade** của hôm nay rồi! Hãy quay lại vào ngày mai nhé.")
             return
 
         # Tạo tin nhắn mời gọi kèm nút mở form
