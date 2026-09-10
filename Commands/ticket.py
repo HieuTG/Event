@@ -223,16 +223,25 @@ class TicketControlView(discord.ui.View):
         await interaction.channel.send(f"🤝 **{interaction.user.mention}** đã tiếp nhận và đang tiến hành kiểm tra phần thưởng!")
 
     @discord.ui.button(
-        label="Đóng Ticket", 
-        style=discord.ButtonStyle.danger, 
-        emoji="🔒", 
+        label="Đóng Ticket",
+        style=discord.ButtonStyle.danger,
+        emoji="🔒",
         custom_id="btn_close_ticket"
     )
     async def close_ticket(self, interaction: discord.Interaction, button: discord.ui.Button):
+        # Kiểm tra quyền: chỉ staff mới được đóng ticket
+        role_ids = get_support_roles()
+        user_role_ids = [r.id for r in interaction.user.roles]
+        is_staff = any(r_id in user_role_ids for r_id in role_ids) or interaction.user.guild_permissions.administrator
+
+        if not is_staff:
+            await interaction.response.send_message("❌ Chỉ Staff quản lý ticket mới có thể đóng ticket này!", ephemeral=True)
+            return
+
         # Vô hiệu hóa nút đóng tạm thời để tránh ấn đúp
         button.disabled = True
         await interaction.message.edit(view=self)
-        
+
         # Bật lên một Form điền thông tin thay vì xóa kênh ngay
         modal = CloseTicketModal(self.bot)
         await interaction.response.send_modal(modal)
